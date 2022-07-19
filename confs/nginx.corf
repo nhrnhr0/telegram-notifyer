@@ -1,0 +1,15 @@
+server {
+        server_name telegram-notifyer.boost-pop.com;
+        location / {
+                include proxy_params;
+                proxy_pass http://unix:/home/ubuntu/telegram-notifyer/proj/app.sock;
+        }
+        location /static {
+                autoindex on;
+                alias /home/ubuntu/telegram-notifyer/static;
+        } location /media {
+                autoindex on;
+                alias /home/ubuntu/telegram-notifyer/static/media_root;
+        }
+    listen 80;
+}
