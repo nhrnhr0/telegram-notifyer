@@ -6,10 +6,10 @@ server {
         }
         location /static {
                 autoindex on;
-                alias /home/ubuntu/telegram-notifyer/static;
+                alias /home/ubuntu/telegram-notifyer/proj/static;
         } location /media {
                 autoindex on;
-                alias /home/ubuntu/telegram-notifyer/static/media_root;
+                alias /home/ubuntu/telegram-notifyer/proj/static/media_root;
         }
     listen 80;
 }
