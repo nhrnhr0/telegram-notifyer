@@ -3,3 +3,5 @@ __pycache__
 db.sqlite3
 secrects.py
 proj/static/*
+proj/celerybeat-schedule
+proj/text.txt
