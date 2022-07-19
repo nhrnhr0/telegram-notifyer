@@ -16,7 +16,7 @@ COMMANDS_MENU = """
     /start - להתחבר לשירות
     /help - להציג את הדרכה לשימוש בשירות
     /change_time - לשנות את השעה להתראה"""
-updater = Updater("TELEGRAM_KEY",
+updater = Updater("fff",
                   use_context=True)
 bot = updater.bot
 registered_users = []
@@ -58,9 +58,9 @@ def update_news(update: Update, context: CallbackContext):
     if(message_text == "עזרה"):
         help(update, context)
         return
-    elif(message_text == "שנה שעת התראה"):
-        change_time(update, context)
-        return
+    # elif(message_text == "שנה שעת התראה"):
+    #     change_time(update, context)
+    #     return
     else:
         handle_news_update(update, context)
     # print('update_news', update.effective_user.id, update.effective_chat.id, update.effective_message.text)
@@ -68,33 +68,33 @@ def update_news(update: Update, context: CallbackContext):
     # ניתן לשלוח אליי טקסט או תמונות מהעסק שלך.
     # """)
 from datetime import datetime
-def change_time(update: Update, context: CallbackContext, page=1):
-    page_count = 3
-    #page = 1
-    paginator = InlineKeyboardPaginator(
-        page_count,
-        current_page=page,
-        data_pattern='time_page#{page}'
-    )
-    if(page != 1):
-        update.message.edit_text(f'hey {page}', reply_markup=paginator.markup)
-    else:
-        update.message.reply_text("""
-        ניתן לשנות את השעה להתראה על מה חדש בשירות.
-        """,reply_markup=paginator.markup,)
+# def change_time(update: Update, context: CallbackContext, page=1):
+#     page_count = 3
+#     #page = 1
+#     paginator = InlineKeyboardPaginator(
+#         page_count,
+#         current_page=page,
+#         data_pattern='time_page#{page}'
+#     )
+#     if(page != 1):
+#         update.message.edit_text(f'hey {page}', reply_markup=paginator.markup)
+#     else:
+#         update.message.reply_text("""
+#         ניתן לשנות את השעה להתראה על מה חדש בשירות.
+#         """,reply_markup=paginator.markup,)
     
 def callback_query_handler(update, context):
     print('callback_query_handler', update)
     cqd = update.callback_query.data
-    if cqd.startswith('time_page'):
-        page = int(cqd.split('#')[1])
-        change_time(update.callback_query, context, page)
-        return
+    # if cqd.startswith('time_page'):
+    #     page = int(cqd.split('#')[1])
+    #     change_time(update.callback_query, context, page)
+    #     return
     # elif cqd == ... ### for other buttons
 
 
 updater.dispatcher.add_handler(CommandHandler('start', start))
-updater.dispatcher.add_handler(CommandHandler('change_time', change_time))
+# updater.dispatcher.add_handler(CommandHandler('change_time', change_time))
 updater.dispatcher.add_handler(CommandHandler('help', help))
 # updater.dispatcher.add_handler(CommandHandler("עדכן על מה חדש", update_news))
 # updater.dispatcher.add_handler(CommandHandler("שנה שעת התראה", change_time))
@@ -111,11 +111,29 @@ updater.dispatcher.add_handler(MessageHandler(Filters.contact, update_news))
 updater.dispatcher.add_handler(MessageHandler(Filters.audio, update_news))
 
 # set bot commands:
-print(updater.bot.set_my_commands(commands=[
-    BotCommand("update_news", "עדכן על מה חדש"),
-    BotCommand("change_time", "שנה שעת התראה"),
-    BotCommand("help", "עזרה")
-]))
+langs_with_commands = {
+    'en':{
+            'start': 'Start bot 🚀',
+            'help': 'Get bot instractions 📖',
+        },
+    'he':{
+            'start': 'התחל את הבוט 🚀',
+            'help': 'קבל הדרכה 📖',
+    }
+}
+
+bot.delete_my_commands()
+for language_code in langs_with_commands:
+    bot.set_my_commands(
+        language_code=language_code,
+        commands=[
+            BotCommand(command, description) for command, description in langs_with_commands[language_code].items()
+        ]
+    )
+
+# print(updater.bot.set_my_commands(commands=[
+#                 BotCommand(command, description) for command, description in my_commands.items()
+#             ]))
 
 print('Starting bot...')
 updater.start_polling()
