@@ -126,3 +126,13 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import os
+STATIC_ROOT= os.path.join(BASE_DIR, "static") # when changed, change allso templates location
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static_cdn"),
+]
+
+MEDIA_URL= '/media/'
+MEDIA_ROOT = os.path.join(STATIC_ROOT, 'media_root/')
